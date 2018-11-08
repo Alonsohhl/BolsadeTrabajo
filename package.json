@@ -1,0 +1,11 @@
+{
+  "name": "bolsatrabajo",
+  "version": "1.0.0",
+  "description": "Tesis de trabajo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alonso Huayta",
+  "license": "ISC"
+}
