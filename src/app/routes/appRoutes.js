@@ -4,8 +4,8 @@ const appController = require('../controllers/appController');
 
 router.get('/', appController.index);
 router.get('/insertarEmp', appController.insEmp);
-router.get('/insProp', appController.insertProp);
-router.get('/update/:id', appController.update);
+router.get('/insProp/:id', appController.insProp);
+//router.get('/update/:id', appController.update);
 /*router.get('/contacto', appController.contacto);
 router.get('/productos', appController.productos);
 router.get('/nosotros', appController.nosotros);
