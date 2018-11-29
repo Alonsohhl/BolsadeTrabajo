@@ -35,8 +35,8 @@ controller.insProp = (req, res) => {
         
        
         res.send(foundObject);
-        foundObject.propuestas.push(req.propuesta);
-        foundObject.save(done);
+        //foundObject.propuestas.push(req.propuesta);
+        //foundObject.save(done);
     });
 }
 
