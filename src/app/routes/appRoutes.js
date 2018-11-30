@@ -3,9 +3,18 @@ const router = require('express').Router();
 const appController = require('../controllers/appController');
 
 router.get('/', appController.index);
-router.get('/insertarEmp', appController.insEmp);
+
+/*====================== Empresa ====================*/
+router.post('/insertarEmp', appController.insEmp);
 router.get('/insProp/:id', appController.insProp);
-router.post('/insProp/:id', appController.insProp);
+
+
+/*====================== Usuario ====================*/
+router.post('/insUsu', appController.insUsu); //ingresa usuario
+router.post('/insUsuProp/', appController.insUsuProp); //ingresa propuesta usuario
+
+router.get('/getPropUsu', appController.GetPropUsu);
+//https://carlosazaustre.es/como-relacionar-tus-modelos-en-mongodb/
 //router.get('/update/:id', appController.update);
 /*router.get('/contacto', appController.contacto);
 router.get('/productos', appController.productos);
