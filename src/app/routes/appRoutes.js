@@ -5,8 +5,8 @@ const appController = require('../controllers/appController');
 router.get('/', appController.index);
 
 /*====================== Empresa ====================*/
-router.post('/insertarEmp', appController.insEmp);
-router.get('/insProp/:id', appController.insProp);
+router.post('/insertarEmp', appController.insEmp); //ingresa empresa
+router.post('/insProp', appController.insProp); //Ingresa propuesta de empresa
 
 
 /*====================== Usuario ====================*/

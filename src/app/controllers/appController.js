@@ -14,6 +14,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 //var EmpresasModel = require('./db/propuestas.js').Propuestas;
 var UsuariosModel = require('./db/propuestas.js').Usuarios;
 var EmpresasModel = require('./db/propuestas.js').Empresa;
+var PropuestasModel = require('./db/propuestas.js').Propuestas;
 
 controller.index = (req, res) => {
 
@@ -37,23 +38,33 @@ controller.insEmp = (req, res) => { //
 /* ================= Ingreso de Empresa->Propuesta ===================*/
 controller.insProp = (req, res) => {
 
-    req.checkBody('_id', 'ID invalido').notEmpty();
-    req.checkBody('propuesta', 'propuesta invalida').exists();
+    req.checkBody('empresa_id', 'ID invalido').notEmpty();
+    req.checkBody('propNombre', 'propuesta invalida').exists();
     var errors = req.validationErrors();
     if (errors) {
         res.send(errors);
         return;
     } else {
-        EmpresasModel.findOne({_id: req.body._id},function (err,foundObject) {
+        EmpresasModel.findOne({_id: req.body.empresa_id},function (err,foundObject) {
         if (err) return res.status(500).send({ error: err });
         if (!foundObject) return res.status(500).send({ error: "Registro no encontrado" });
             console.log("Propuesta "+req.body.propuesta);
-            foundObject.propuestas.push(req.body.propuesta);
-            foundObject.save(function (err) {
-                if (err) console.log({ error: err });
-                    console.log("Ingresado correctamente");
-                    res.send(foundObject);
-                });
+
+            var propuesta = new PropuestasModel({
+                _id: new mongoose.Types.ObjectId(),
+                empresa: foundObject,
+                propNombre:'propuestilla' ,
+                
+              });
+              propuesta.save(function (err) {
+                if (err) return handleError(err);
+
+                console.log("Ingresado correctamente");
+                res.send(foundObject);
+                // thats it!
+              });
+
+
             
         });
     }
