@@ -48,6 +48,7 @@ var usuariosSchema = new Schema({
   //_id         :Schema.Types.ObjectId,
   usuUsuario  :String,
   usuNombre   :String,
+  usuCodAlumno:String,
   usuPassword :String,
   usuPrograma :String,
  // usuIntereses:string,

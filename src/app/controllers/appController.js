@@ -69,24 +69,42 @@ controller.insProp = (req, res) => {
         });
     }
 }
+/* ================= Usuario Check Login ===================*/
+controller.usuLogin = (req, res) => {
 
+    req.checkBody('usuUsuario',    'Usuario invalido').notEmpty().isString();
+    // req.checkBody('usuNombre',     'Nombre invalido').notEmpty().isString();
+    // req.checkBody('usuCodAlumno',    'Codigo de Alumno  invalido').notEmpty().isString();
+    // req.checkBody('usuPrograma',   'Programa invalido').optional().isString();
+    req.checkBody('usuPassword',   'Password invalido').notEmpty()
+    // req.checkBody('usuIntereses',  'Intereses invalido').optional().isString();
+
+
+    UsuariosModel.find({usuUsuario:req.body.usuUsuario,usuPassword:req.body.usuPassword,},function (err,foundObject) {
+        console.log(foundObject)
+        if (err) res.send(res.status(500));
+        res.status(200).send(foundObject);        
+    });
+}
 /* ================= Ingreso de Usuario ===================*/
 controller.insUsu = (req, res) => {
 
     req.checkBody('usuUsuario',    'Usuario invalido').notEmpty().isString();
     req.checkBody('usuNombre',     'Nombre invalido').notEmpty().isString();
-    req.checkBody('usuPrograma',   'Programa invalido').notEmpty().isString();
-    req.checkBody('usuPassword',   'Password invalido').notEmpty().isString();
+    req.checkBody('usuCodAlumno',    'Codigo de Alumno  invalido').notEmpty().isString();
+    req.checkBody('usuPrograma',   'Programa invalido').optional().isString();
+    req.checkBody('usuPassword',   'Password invalido').notEmpty()
     req.checkBody('usuIntereses',  'Intereses invalido').optional().isString();
 
     var errors = req.validationErrors();
     if (errors) {
-        res.send(errors);
-        return;
+        // res.send(errors);
+        // return;
+        return res.send({ error: errors });
     } else {
         var newEmp = new UsuariosModel(req.body);
         newEmp.save(function (err) {
-            if (err) return res.status(500).send({ error: err });
+            if (err) res.send(res.status(500));//return res.status(500)//.send({ error: err });
             return res.send("Ingresado Correctamente");
 
         });

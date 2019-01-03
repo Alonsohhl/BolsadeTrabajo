@@ -12,6 +12,7 @@ router.post('/insProp', appController.insProp); //Ingresa propuesta de empresa
 /*====================== Usuario ====================*/
 router.post('/insUsu', appController.insUsu); //ingresa usuario
 router.post('/insUsuProp/', appController.insUsuProp); //ingresa propuesta usuario
+router.get('/usuLogin/', appController.usuLogin); //ingresa propuesta usuario
 
 router.get('/getPropUsu', appController.GetPropUsu);
 //https://carlosazaustre.es/como-relacionar-tus-modelos-en-mongodb/
