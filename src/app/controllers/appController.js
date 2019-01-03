@@ -104,9 +104,12 @@ controller.insUsu = (req, res) => {
     } else {
         var newEmp = new UsuariosModel(req.body);
         newEmp.save(function (err) {
-            if (err) res.send(res.status(500));//return res.status(500)//.send({ error: err });
-            return res.send("Ingresado Correctamente");
-
+             if (err){
+                console.log('Error:'+err) 
+                return res.send({ error: err });} //res.send(res.status(500));//return res.status(500)//.send({ error: err });
+            // return res.send("Ingresado Correctamente");
+            console.log('xD')
+            return
         });
     }
 }
