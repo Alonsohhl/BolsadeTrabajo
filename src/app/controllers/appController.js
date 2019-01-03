@@ -80,10 +80,13 @@ controller.usuLogin = (req, res) => {
     // req.checkBody('usuIntereses',  'Intereses invalido').optional().isString();
 
 
-    UsuariosModel.find({usuUsuario:req.body.usuUsuario,usuPassword:req.body.usuPassword,},function (err,foundObject) {
+    UsuariosModel.find( {       usuUsuario:req.body.usuUsuario.toLowerCase(),
+                                               usuPassword:req.body.usuPassword,
+                                            },function (err,foundObject) {
         console.log(foundObject)
         if (err) res.send(res.status(500));
-        res.status(200).send(foundObject);        
+        res.send({log:true}); 
+        // res.status(200).send(foundObject);        
     });
 }
 /* ================= Ingreso de Usuario ===================*/
@@ -108,7 +111,6 @@ controller.insUsu = (req, res) => {
                 console.log('Error:'+err) 
                 return res.send({ error: err });} //res.send(res.status(500));//return res.status(500)//.send({ error: err });
             // return res.send("Ingresado Correctamente");
-            console.log('xD')
             return
         });
     }

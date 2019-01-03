@@ -46,7 +46,12 @@ var empSchema = new Schema({
 //var Autor = mongoose_con.model('usuarios');
 var usuariosSchema = new Schema({
   //_id         :Schema.Types.ObjectId,
-  usuUsuario  :String,
+ // usuUsuario2  :String,
+  usuUsuario: {
+        type: String,
+        //enum: ["male", "female", "other", "unknown"],
+        lowercase: true,
+    },
   usuNombre   :String,
   usuCodAlumno:String,
   usuPassword :String,
