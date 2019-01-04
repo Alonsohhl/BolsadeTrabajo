@@ -1,17 +1,17 @@
 const controller = {};
 
 var mongoose = require('mongoose');
+const jwt = require("jsonwebtoken")
+const { check, validationResult } = require('express-validator/check');
+;
+// const bcrypt = require("bcrypt");
+//https://github.com/academind/node-restful-api-tutorial/blob/11-auth-signin/api/routes/user.js
  
 mongoose.connect('mongodb+srv://admin:admin@dbbolsadetrabajo-3qw6r.mongodb.net/dbbolsadetrabajo', { useNewUrlParser: true });
-
 // get reference to database
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-//var Model = require('./db/propuestas.js').Propuestas;
-//var EmpresasModel = Model.Propuestas;
-
-//var EmpresasModel = require('./db/propuestas.js').Propuestas;
 var UsuariosModel = require('./db/propuestas.js').Usuarios;
 var EmpresasModel = require('./db/propuestas.js').Empresa;
 var PropuestasModel = require('./db/propuestas.js').Propuestas;
@@ -69,6 +69,86 @@ controller.insProp = (req, res) => {
         });
     }
 }
+/* ================= Usuario Check Login Better ===================*/
+//router.post("/login", (req, res, next) => {
+controller.login = (req, res,next) => {
+    UsuariosModel.find({ usuUsuario: req.body.usuUsuario })
+      .exec()
+      .then(user => {
+        // return res.status(401).json({
+        //     message: "YEAHP",
+        //     user
+        //   });
+        if (user.length < 1) {
+          return res.status(401).json({
+            message: "Usuario no Valido"
+          });
+        }
+        // return res.status(200).json({
+        //     message: "Login",
+        //     user
+        //   });
+        
+        // bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        //   if (err) {
+        //     return res.status(401).json({
+        //       message: "Usuario no Valido"
+        //     });
+        //   }
+        
+        if (req.body.usuPassword != user[0].usuPassword) {
+            return res.status(401).json({
+                message: "Usuario no Valido"
+            });
+        }else{
+
+            const token = jwt.sign(
+                {
+                usuUsuario: user[0].usuUsuario,
+                userId: user[0]._id
+                },
+                "CLAVEUCSM",
+                // process.env.JWT_KEY,
+                {
+                    expiresIn: "1h"
+                }
+            );
+            return res.status(200).json({
+                message: "Logeado correctamente",
+                token: token
+            });
+        }
+
+          /*
+          if (result) {
+            const token = jwt.sign(
+              {
+                email: user[0].email,
+                userId: user[0]._id
+              },
+              process.env.JWT_KEY,
+              {
+                  expiresIn: "1h"
+              }
+            );
+            return res.status(200).json({
+              message: "Auth successful",
+              token: token
+            });
+          }
+          res.status(401).json({
+            message: "Auth failed"
+          });
+        });*/
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+      });
+  }//);
+
 /* ================= Usuario Check Login ===================*/
 controller.usuLogin = (req, res) => {
 
@@ -96,18 +176,33 @@ controller.usuLogin = (req, res) => {
 /* ================= Ingreso de Usuario ===================*/
 controller.insUsu = (req, res) => {
 
-    req.checkBody('usuUsuario',    'Usuario invalido').notEmpty().isString();
-    req.checkBody('usuNombre',     'Nombre invalido').notEmpty().isString();
-    req.checkBody('usuCodAlumno',    'Codigo de Alumno  invalido').notEmpty().isString();
-    req.checkBody('usuPrograma',   'Programa invalido').optional().isString();
-    req.checkBody('usuPassword',   'Password invalido').notEmpty()
-    req.checkBody('usuIntereses',  'Intereses invalido').optional().isString();
+    // const errors2 = validationResult(req);
+    // if (!errors2.isEmpty()) {
+    //     return res.status(422).json({ errors: errors2.array() });
+    // }
 
-    var errors = req.validationErrors();
+    // req.checkBody('usuUsuario',    'Usuario invalido').notEmpty().isString();
+    // req.checkBody('usuNombre',     'Nombre invalido').notEmpty().isString();
+    // req.checkBody('usuCodAlumno',    'Codigo de Alumno  invalido').notEmpty().isString();
+    // req.checkBody('usuPrograma',   'Programa invalido').optional().isString();
+    // req.checkBody('usuPassword',   'Password invalido').notEmpty()
+    // req.checkBody('usuIntereses',  'Intereses invalido').optional().isString();
+
+
+    [
+        // ...some other validations...
+        check('password')
+          .isLength({ min: 5 }).withMessage('must be at least 5 chars long')
+          .matches(/\d/).withMessage('must contain a number')
+      ]
+
+    // var errors = req.validationErrors();
+    var errors = validationResult(req);
     if (errors) {
         // res.send(errors);
-        // return;
-        return res.send({ error: errors });
+        // return;  res.status(422).json({ errors: errors2.array() });
+        // return res.send({ error: errors });
+        return res.status(422).json({ errors: errors.array() });
     } else {
         var newEmp = new UsuariosModel(req.body);
         newEmp.save(function (err) {
