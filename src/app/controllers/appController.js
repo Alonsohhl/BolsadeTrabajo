@@ -176,41 +176,18 @@ controller.usuLogin = (req, res) => {
 /* ================= Ingreso de Usuario ===================*/
 controller.insUsu = (req, res) => {
 
-    // const errors2 = validationResult(req);
-    // if (!errors2.isEmpty()) {
-    //     return res.status(422).json({ errors: errors2.array() });
-    // }
-
-    // req.checkBody('usuUsuario',    'Usuario invalido').notEmpty().isString();
-    // req.checkBody('usuNombre',     'Nombre invalido').notEmpty().isString();
-    // req.checkBody('usuCodAlumno',    'Codigo de Alumno  invalido').notEmpty().isString();
-    // req.checkBody('usuPrograma',   'Programa invalido').optional().isString();
-    // req.checkBody('usuPassword',   'Password invalido').notEmpty()
-    // req.checkBody('usuIntereses',  'Intereses invalido').optional().isString();
-
-
-    [
-        // ...some other validations...
-        check('password')
-          .isLength({ min: 5 }).withMessage('must be at least 5 chars long')
-          .matches(/\d/).withMessage('must contain a number')
-      ]
-
-    // var errors = req.validationErrors();
     var errors = validationResult(req);
-    if (errors) {
-        // res.send(errors);
-        // return;  res.status(422).json({ errors: errors2.array() });
-        // return res.send({ error: errors });
+    if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     } else {
+        //return res.status(200).send({ hola: 'err' })
         var newEmp = new UsuariosModel(req.body);
         newEmp.save(function (err) {
              if (err){
-                console.log('Error:'+err) 
-                return res.send({ error: err });} //res.send(res.status(500));//return res.status(500)//.send({ error: err });
+                console.dir(err) 
+                return res.status(400).send({ error: err});} //res.send(res.status(500));//return res.status(500)//.send({ error: err });
             // return res.send("Ingresado Correctamente");
-            return
+            return  res.status(201).send("Ingresado Correctamente");
         });
     }
 }
