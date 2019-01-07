@@ -6,6 +6,7 @@ const { check, validationResult } = require('express-validator/check');
 ;
 // const bcrypt = require("bcrypt");
 //https://github.com/academind/node-restful-api-tutorial/blob/11-auth-signin/api/routes/user.js
+//https://www.youtube.com/watch?v=8Ip0pcwbWYM routes and errors
  
 mongoose.connect('mongodb+srv://admin:admin@dbbolsadetrabajo-3qw6r.mongodb.net/dbbolsadetrabajo', { useNewUrlParser: true });
 // get reference to database
@@ -180,14 +181,13 @@ controller.insUsu = (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     } else {
-        //return res.status(200).send({ hola: 'err' })
         var newEmp = new UsuariosModel(req.body);
         newEmp.save(function (err) {
-             if (err){
-                console.dir(err) 
-                return res.status(400).send({ error: err});} //res.send(res.status(500));//return res.status(500)//.send({ error: err });
-            // return res.send("Ingresado Correctamente");
-            return  res.status(201).send("Ingresado Correctamente");
+        if (err){
+            console.dir(err) 
+            return res.status(422).send({ error: err}); } 
+
+        return  res.status(201).send("Ingresado Correctamente");
         });
     }
 }
